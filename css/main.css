@@ -8,7 +8,8 @@
   box-sizing: border-box;
 }
 
-h1 {
+h1,
+.font-span {
   font-family: "futura";
   font-size: 27px;
   letter-spacing: 1.5px;
@@ -60,7 +61,7 @@ h1 {
 }
 
 .mg-t {
-  padding-top: 70px;
+  padding-top: 50px;
 }
 .letter-space {
   letter-spacing: 2px;
@@ -86,9 +87,15 @@ a {
   margin-right: 5px;
 }
 
-.font-size-25 {
+.font-size {
   font-size: 30px;
   font-family: "futura";
+}
+
+/*image café*/
+.cafe {
+  width: 55%;
+  margin-top: -100px;
 }
 
 /* animation logo avec video */
@@ -246,10 +253,18 @@ a {
 }
 
 /* responsaive  */
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 400px) {
   .cafe {
     width: 70%;
+    margin-top: 0px;
   }
+
+}
+@media screen and (max-width: 500px) {
+
+}
+@media screen and (max-width: 700px) {
+
   .mg-t {
     padding-top: 60px;
   }
@@ -263,12 +278,17 @@ a {
   .justify {
     text-align: justify;
   }
+ 
 }
 @media screen and (max-width: 991px) {
   .mg-t {
     padding-top: 50px;
   }
-  img .cafe {
-    width: 2px;
+  .cafe {
+    width: 50%;
+    margin-top: 0px;
   }
+
 }
+
+

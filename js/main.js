@@ -1,90 +1,57 @@
- // Get the id of the <path> element and the length of <path>
- var path = document.getElementById( "path");
- var length = path.getTotalLength();
+var TxtType = function(el, toRotate, period) {
+    this.toRotate = toRotate;
+    this.el = el;
+    this.loopNum = 0;
+    this.period = parseInt(period, 10) || 2000;
+    this.txt = '';
+    this.tick();
+    this.isDeleting = false;
+};
 
- // The start position of the drawing
- path.style.strokeDasharray = length;
+TxtType.prototype.tick = function() {
+    var i = this.loopNum % this.toRotate.length;
+    var fullTxt = this.toRotate[i];
 
- // Hide the draw by offsetting dash. Remove this line to show the triangle before scroll draw
- path.style.strokeDashoffset = length;
-
- // Find scroll percentage on scroll (using cross-browser properties), and offset dash same amount as percentage scrolled
- window.addEventListener("scroll", myFunction);
-
- function myFunction() {
-   var scrollpercent =
-     (document.body.scrollTop + document.documentElement.scrollTop) /
-     (document.documentElement.scrollHeight -
-       document.documentElement.clientHeight);
-
-   var draw = length * scrollpercent;
-
-   // Reverse the drawing (when scrolling upwards)
-   path.style.strokeDashoffset = length - draw;
- }
-
-//  const pathL = document.querySelectorAll(".lettre");
-//  console.log(pathL)
-// for(let i = 0; i < pathL.length; i++ ) {
-//   console.log(`Letter ${i} is ${pathL[i].getTotalLength()}`);
-// }
-//  console.log(pathL.getTotalLength());
-
-//animation de la fusée au vue du dessin
-const el = document.querySelector('.filled')
-const ratio = .2
-const options = {
-  root: null,
-  rootMargin: '0px',
-  threshold: ratio
-}
-const handleIntersect = function (entries, observer) {
-  entries.forEach(function (entry) {
-    // console.log(entry.intersectionRatio)
-    // console.log(entry)
-    if (entry.intersectionRatio > ratio) {
-      el.classList.add('filled-reveal')
-      el.classList.remove('filled')
-      // console.log("visible")
-      observer.unobserve(entry.target)
+    if (this.isDeleting) {
+    this.txt = fullTxt.substring(0, this.txt.length - 1);
     } else {
-      // console.log("invisible")
+    this.txt = fullTxt.substring(0, this.txt.length + 1);
     }
-  })
-}
-const observer = new IntersectionObserver(handleIntersect, options)
-observer.observe(document.querySelector('.svg-circle'))
 
+    this.el.innerHTML = '<span class="wrap ">'+this.txt+'</span>';
 
-//animation text .com
-function typeEffect(element, speed) {
-	var text = element.innerHTML;
-	element.innerHTML = "";
-	
-	var i = 0;
-	var timer = setInterval(function() {
-    if (i < text.length) {
-      element.append(text.charAt(i));
-      i++;
-    } else {
-      clearInterval(timer);
+    var that = this;
+    var delta = 200 - Math.random() * 100;
+
+    if (this.isDeleting) { delta /= 2; }
+
+    if (!this.isDeleting && this.txt === fullTxt) {
+    delta = this.period;
+    this.isDeleting = true;
+    } else if (this.isDeleting && this.txt === '') {
+    this.isDeleting = false;
+    this.loopNum++;
+    delta = 500;
     }
-  }, speed);
-}
 
+    setTimeout(function() {
+    that.tick();
+    }, delta);
+};
 
-// application
-var speed = 100;
-var h6 = document.querySelector('h6');
-var h5 = document.querySelector('h5');
-var delay = h6.innerHTML.length * speed + speed;
-
-// type affect to header
-typeEffect(h6, speed);
-
-
-// type affect to body
-setTimeout(function(){
-  h5.style.display = "inline-block";
-  typeEffect(h5, speed);
-}, delay);
+window.onload = function() {
+    var elements = document.getElementsByClassName('typewrite');
+    for (var i=0; i<elements.length; i++) {
+        var toRotate = elements[i].getAttribute('data-type');
+        var period = elements[i].getAttribute('data-period');
+        if (toRotate) {
+          new TxtType(elements[i], JSON.parse(toRotate), period);
+        }
+    }
+    // INJECT CSS
+    var css = document.createElement("style");
+    css.type = "text/css";
+    css.innerHTML = 
+    ".wrap:after{content:' ]';font-size:30px;  background:white; color: #001D3D}, .color{color:red !important} ";
+    document.body.appendChild(css);
+};
