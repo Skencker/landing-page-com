@@ -107,7 +107,7 @@ a {
  
 .svg-tourne {
   opacity: 0;
-  animation: opacity 1s ease forwards;
+  animation: opacity 1.5s ease forwards;
 }
 
 
